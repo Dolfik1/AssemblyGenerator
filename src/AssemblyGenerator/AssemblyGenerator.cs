@@ -37,27 +37,13 @@ namespace AssemblyGenerator
                 _assemblyNameFlagsConvert(name.Flags),
                 _assemblyHashAlgorithmConvert(name.HashAlgorithm));
 
-            var refs = _currentAssembly.GetReferencedAssemblies();
-            CreateReferencedAssemblies(refs);
+            CreateReferencedAssemblies(_currentAssembly.GetReferencedAssemblies());
+            CreateCustomAttributes(assemblyHandle, _currentAssembly.GetCustomAttributesData());
 
-            var modules = _currentAssembly.GetModules();
-            foreach (var module in modules)
-            {
-                var moduleHandle = _metadataBuilder.AddModule(
-                    0, // reserved in ECMA
-                    GetString(module.Name),
-                    GetGuid(module.ModuleVersionId),
-                    default(GuidHandle), // reserved in ECMA
-                    default(GuidHandle)); // reserved in ECMA
-
-                CreateFields(module.GetFields());
-                CreateTypes(module.GetTypes());
-                CreateMethods(module.GetMethods(_defaultMethodsBindingFlags));
-
-                Console.WriteLine();
-            }
+            CreateModules(_currentAssembly.GetModules());
             CreateTypes(_currentAssembly.GetTypes());
 
+            var entryPoint = GetMethodDefinitionHandle(_currentAssembly.EntryPoint);
             
             var metadataRootBuilder = new MetadataRootBuilder(_metadataBuilder);
             var header = PEHeaderBuilder.CreateLibraryHeader();
@@ -66,7 +52,8 @@ namespace AssemblyGenerator
                 header,
                 metadataRootBuilder,
                 _ilBuilder,
-                debugDirectoryBuilder: _debugDirectoryBuilder);
+                debugDirectoryBuilder: _debugDirectoryBuilder,
+                entryPoint: entryPoint);
 
             var peImageBuilder = new BlobBuilder();
             peBuilder.Serialize(peImageBuilder);

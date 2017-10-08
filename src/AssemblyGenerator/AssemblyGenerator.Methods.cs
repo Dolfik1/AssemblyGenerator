@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 
@@ -10,6 +11,9 @@ namespace AssemblyGenerator
             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | 
             BindingFlags.DeclaredOnly | BindingFlags.CreateInstance |
             BindingFlags.Instance;
+
+        private Dictionary<MethodInfo, MethodDefinitionHandle> _methodsHandles = 
+            new Dictionary<MethodInfo, MethodDefinitionHandle>();
 
         private BlobHandle GetMethodSignature(MethodInfo methodInfo)
         {
@@ -30,6 +34,14 @@ namespace AssemblyGenerator
                 }));
             return GetBlob(blob);
 
+        }
+
+        private MethodDefinitionHandle GetMethodDefinitionHandle(MethodInfo methodInfo)
+        {
+            if (methodInfo == null)
+                return default(MethodDefinitionHandle);
+
+            return _methodsHandles[methodInfo];
         }
 
         private MethodDefinitionHandle CreateMethods(MethodInfo[] methodInfos)
@@ -56,6 +68,12 @@ namespace AssemblyGenerator
 					signature,
                     offset,
 					parameters);
+
+                /*
+                 FieldList and MethodList described in ECMA 335, page 270
+                 */
+
+                _methodsHandles.Add(method, temp);
 
                 if (handle == default(MethodDefinitionHandle))
                     handle = temp;
