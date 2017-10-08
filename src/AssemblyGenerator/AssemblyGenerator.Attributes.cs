@@ -10,8 +10,10 @@ namespace AssemblyGenerator
         {
             foreach (var attr in attributes)
             {
-                var ctor = CreateConstructor(attr.Constructor);
-                var type = GetOrCreateType(attr.AttributeType);
+                var type = attr.AttributeType;
+                GetOrCreateType(type); // create type
+
+                var ctor = GetTypeConstructor(type);
                 _metadataBuilder.AddCustomAttribute(parent, ctor, default(BlobHandle));
             }
         }

@@ -1,10 +1,16 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 
 namespace AssemblyGenerator
 {
     public partial class AssemblyGenerator
     {
+        internal Dictionary<Guid, List<EntityHandle>> _typeConstructors
+            = new Dictionary<Guid, List<EntityHandle>>();
+
         internal BlobHandle GetConstructorSignature(ConstructorInfo constructorInfo)
         {
             var parameters = constructorInfo.GetParameters();
@@ -14,7 +20,8 @@ namespace AssemblyGenerator
                 .Parameters(
                 countParameters,
                 r => r.Void(),
-                p => {
+                p =>
+                {
                     foreach (var par in parameters)
                     {
                         var parEncoder = p.AddParameter();
@@ -24,7 +31,36 @@ namespace AssemblyGenerator
             return GetBlob(blob);
         }
 
-        internal MethodDefinitionHandle CreateConstructor(ConstructorInfo constructorInfo)
+        internal EntityHandle GetTypeConstructor(Type type)
+        {
+            return _typeConstructors[type.GUID].First();
+        }
+
+        internal MemberReferenceHandle CreateConstructorForReferencedType(Type type)
+        {
+            var ctors = type.GetConstructors();
+            var typeHandle = GetOrCreateType(type);
+
+            var handle = default(MemberReferenceHandle);
+
+            foreach (var ctor in ctors)
+            {
+                var signature = GetConstructorSignature(ctor);
+                var tmp = _metadataBuilder.AddMemberReference(typeHandle, GetString(ctor.Name), signature);
+
+                if (handle == default(MemberReferenceHandle))
+                    handle = tmp;
+
+                if (_typeConstructors.ContainsKey(type.GUID))
+                    _typeConstructors[type.GUID].Add(tmp);
+                else
+                    _typeConstructors.Add(type.GUID, new List<EntityHandle> { tmp });
+            }
+
+            return handle;
+        }
+
+        internal MethodDefinitionHandle CreateConstructor(ConstructorInfo constructorInfo, Type type)
         {
             var parameters = CreateParameters(constructorInfo.GetParameters());
             var bodyOffset = _ilBuilder.Count;
@@ -35,20 +71,28 @@ namespace AssemblyGenerator
                 _ilBuilder.WriteBytes(body.GetILAsByteArray());
             }
 
-            return _metadataBuilder.AddMethodDefinition(constructorInfo.Attributes,
+            var method = _metadataBuilder.AddMethodDefinition(
+                constructorInfo.Attributes,
                 constructorInfo.MethodImplementationFlags,
                 GetString(constructorInfo.Name),
                 GetConstructorSignature(constructorInfo),
                 bodyOffset,
                 parameters);
+
+            if (_typeConstructors.ContainsKey(type.GUID))
+                _typeConstructors[type.GUID].Add(method);
+            else
+                _typeConstructors.Add(type.GUID, new List<EntityHandle> { method });
+
+            return method;
         }
 
-		internal MethodDefinitionHandle CreateConstructors(ConstructorInfo[] constructorInfo)
+        internal MethodDefinitionHandle CreateConstructors(ConstructorInfo[] constructorInfo, Type type)
         {
             var handle = default(MethodDefinitionHandle);
             foreach (var ctor in constructorInfo)
             {
-                var temp = CreateConstructor(ctor);
+                var temp = CreateConstructor(ctor, type);
                 if (handle == default(MethodDefinitionHandle))
                     handle = temp;
             }

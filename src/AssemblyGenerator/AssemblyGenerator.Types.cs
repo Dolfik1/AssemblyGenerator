@@ -30,6 +30,8 @@ namespace AssemblyGenerator
                 GetString(type.Name));
 
             _typeHandles.Add(type.GUID, refType);
+            CreateConstructorForReferencedType(type);
+
             return refType;
         }
 
@@ -39,7 +41,7 @@ namespace AssemblyGenerator
             // ECMA-335 page 273-274
             return type.Assembly != _currentAssembly;
         }
-
+        
         internal EntityHandle GetOrCreateType(Type type)
         {
             if (_typeHandles.ContainsKey(type.GUID))
@@ -65,11 +67,10 @@ namespace AssemblyGenerator
                 }
             }
 
-            Console.WriteLine(type.Name);
-
             var methods = CreateMethods(type.GetMethods(_defaultMethodsBindingFlags));
+            CreateConstructors(type.GetConstructors(), type);
+
             var fields = CreateFields(type.GetFields(_defaultFieldsBindingFlags));
-            CreateConstructors(type.GetConstructors()); // TODO
             
 
 
