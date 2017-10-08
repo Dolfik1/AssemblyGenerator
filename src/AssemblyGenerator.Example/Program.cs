@@ -29,6 +29,16 @@ namespace AssemblyGenerator.Example
 
         }
 
+        static void MainTestIntArr(int[] x)
+        {
+
+        }
+
+        static void MainTestIntArrMultiple(int[,,,] x)
+        {
+
+        }
+
         static int MainTestIntReturn(int x)
         {
             return x;

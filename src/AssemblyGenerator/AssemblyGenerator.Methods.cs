@@ -75,6 +75,7 @@ namespace AssemblyGenerator
 
                 _methodsHandles.Add(method, temp);
 
+                CreateCustomAttributes(temp, method.GetCustomAttributesData());
                 if (handle == default(MethodDefinitionHandle))
                     handle = temp;
             }

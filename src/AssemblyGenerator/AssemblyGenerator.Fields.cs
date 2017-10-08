@@ -34,6 +34,8 @@ namespace AssemblyGenerator
                     GetString(field.Name),
                     GetFieldSignature(field));
 
+                CreateCustomAttributes(temp, field.GetCustomAttributesData());
+
                 // It seems that we only need the first method
                 if (handle == default(FieldDefinitionHandle))
                     handle = temp;

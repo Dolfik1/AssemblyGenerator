@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using CfgAssemblyHashAlgorithm = System.Configuration.Assemblies.AssemblyHashAlgorithm;
 
 namespace AssemblyGenerator
@@ -47,6 +48,14 @@ namespace AssemblyGenerator
         private BlobHandle GetBlob(byte[] bytes)
         {
             return _metadataBuilder.GetOrAddBlob(bytes);
+        }
+
+        private BlobHandle GetBlobString(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return default(BlobHandle);
+
+            return _metadataBuilder.GetOrAddBlobUTF8(str);
         }
 
         private BlobHandle GetBlob(BlobBuilder builder)

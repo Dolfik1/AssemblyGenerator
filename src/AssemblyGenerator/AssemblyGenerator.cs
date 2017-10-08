@@ -30,7 +30,7 @@ namespace AssemblyGenerator
             var name = _currentAssembly.GetName();
 
             var assemblyHandle = _metadataBuilder.AddAssembly(
-                GetString(name.FullName),
+                GetString(name.Name),
                 name.Version,
                 GetString(name.CultureName),
                 GetBlob(name.GetPublicKey()),
