@@ -25,7 +25,7 @@ namespace AssemblyGenerator
                 }));
 
                 var ctor = GetTypeConstructor(type);
-                _metadataBuilder.AddCustomAttribute(parent, ctor, GetBlobString(text));
+                _metadataBuilder.AddCustomAttribute(parent, ctor, GetCustomAttributeValueFromString(text));
             }
         }
     }

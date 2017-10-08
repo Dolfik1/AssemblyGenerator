@@ -93,7 +93,7 @@ namespace AssemblyGenerator
             return _metadataBuilder.GetOrAddBlob(bytes);
         }
         
-        private BlobHandle GetBlobString(string str)
+        private BlobHandle GetCustomAttributeValueFromString(string str)
         {
             if (str == null)
                 return default(BlobHandle);
