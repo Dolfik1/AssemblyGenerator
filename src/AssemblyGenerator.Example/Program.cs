@@ -45,7 +45,6 @@ namespace AssemblyGenerator.Example
 
         static void MainTestIntArrMultiple(int[,,,] x)
         {
-
         }
 
         static int MainTestIntReturn(int x)

@@ -28,7 +28,7 @@ namespace AssemblyGenerator
         public byte[] GenerateAssemblyBytes()
         {
             var name = _currentAssembly.GetName();
-
+        
             var assemblyHandle = _metadataBuilder.AddAssembly(
                 GetString(name.Name),
                 name.Version,

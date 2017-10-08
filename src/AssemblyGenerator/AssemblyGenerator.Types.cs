@@ -88,7 +88,8 @@ namespace AssemblyGenerator
 
             CreatePropertiesForType(def, type.GetProperties(_defaultPropertiesBindingFlags));
             CreateCustomAttributes(def, type.GetCustomAttributesData());
-
+            
+            
 
             return def;
         }

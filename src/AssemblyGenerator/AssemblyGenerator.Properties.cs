@@ -48,8 +48,26 @@ namespace AssemblyGenerator
 
                 if (handle == default(PropertyDefinitionHandle))
                     handle = tmp;
-            }
 
+                var getMethod = prop.GetGetMethod(true);
+                if (getMethod != null)
+                {
+                    _metadataBuilder.AddMethodSemantics(
+                        tmp, 
+                        MethodSemanticsAttributes.Getter, 
+                        GetOrCreateMethod(getMethod));
+                }
+
+                var setMethod = prop.GetSetMethod(true);
+                if (setMethod != null)
+                {
+                    _metadataBuilder.AddMethodSemantics(
+                        tmp,
+                        MethodSemanticsAttributes.Getter,
+                        GetOrCreateMethod(setMethod));
+                }
+            }
+            
             _metadataBuilder.AddPropertyMap(typeHandle, handle);
         }
     }
