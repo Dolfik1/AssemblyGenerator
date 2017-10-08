@@ -1,0 +1,15 @@
+﻿C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\peverify
+
+Fields list in property has null, when empty
+Default constructor not verified
+Entry point return type void incorrect (why?)
+
+
+why?
+
+[MD]: Error: EntryPoint method has invalid number of arguments, expecting 3. [token:0x06000001]
+[MD]: Error: EntryPoint method has invalid return type. [token:0x06000001]
+[MD]: Error: EntryPoint method has invalid argument number 1. [token:0x06000001]
+[MD]: Error: Global item (field,method) must be Static. [token:0x06000006]
+[MD]: Error: Global item (field,method) must be Static. [token:0x06000007]
+[MD]: Error: Global constructor. [token:0x06000007]

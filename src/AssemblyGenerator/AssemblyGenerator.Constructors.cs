@@ -16,7 +16,9 @@ namespace AssemblyGenerator
             var parameters = constructorInfo.GetParameters();
             var countParameters = parameters.Length;
 
-            var blob = BuildSignature(x => x.MethodSignature(isInstanceMethod: true)
+            var blob = BuildSignature(x => x.MethodSignature(
+                    isInstanceMethod: true,
+                    convention: ConvertCallingConvention(constructorInfo.CallingConvention))
                 .Parameters(
                 countParameters,
                 r => r.Void(),
@@ -55,6 +57,8 @@ namespace AssemblyGenerator
                     _typeConstructors[type.GUID].Add(tmp);
                 else
                     _typeConstructors.Add(type.GUID, new List<EntityHandle> { tmp });
+
+                CreateCustomAttributes(tmp, ctor.GetCustomAttributesData());
             }
 
             return handle;

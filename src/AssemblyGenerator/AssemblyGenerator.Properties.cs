@@ -33,16 +33,16 @@ namespace AssemblyGenerator
 
         }
 
-        public void CreatePropertiesForType(TypeDefinitionHandle typeHandle, PropertyInfo[] propertyInfo)
+        public PropertyDefinitionHandle CreatePropertiesForType(PropertyInfo[] propertyInfo)
         {
-            if (propertyInfo.Length == 0) return;
-
             var handle = default(PropertyDefinitionHandle);
+            if (propertyInfo.Length == 0) return handle;
+
             foreach (var prop in propertyInfo)
             {
                 var signature = GetPropertySignature(prop);
                 var tmp = _metadataBuilder.AddProperty(
-                    prop.Attributes, 
+                    prop.Attributes,
                     GetString(prop.Name),
                     signature);
 
@@ -67,8 +67,8 @@ namespace AssemblyGenerator
                         GetOrCreateMethod(setMethod));
                 }
             }
-            
-            _metadataBuilder.AddPropertyMap(typeHandle, handle);
+
+            return handle;
         }
     }
 }

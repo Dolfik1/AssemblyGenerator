@@ -69,11 +69,13 @@ namespace AssemblyGenerator
                 }
             }
 
+            var propsHandle = CreatePropertiesForType(type.GetProperties(_defaultPropertiesBindingFlags));
             var methods = CreateMethods(type.GetMethods(_defaultMethodsBindingFlags));
+
             CreateConstructors(type.GetConstructors(), type);
 
             var fields = CreateFields(type.GetFields(_defaultFieldsBindingFlags));
-            
+
 
 
             var def = _metadataBuilder.AddTypeDefinition(
@@ -86,7 +88,12 @@ namespace AssemblyGenerator
 
             _typeHandles[type.GUID] = def;
 
-            CreatePropertiesForType(def, type.GetProperties(_defaultPropertiesBindingFlags));
+
+            if (propsHandle == default(PropertyDefinitionHandle))
+            {
+                _metadataBuilder.AddPropertyMap(def, propsHandle);
+            }
+
             CreateCustomAttributes(def, type.GetCustomAttributesData());
             
             

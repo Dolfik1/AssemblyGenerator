@@ -55,7 +55,7 @@ namespace AssemblyGenerator
 
 
                 var handle = _metadataBuilder.AddAssemblyReference(
-                    GetString(asm.FullName),
+                    GetString(asm.Name),
                     asm.Version,
                     GetString(asm.CultureName),
                     hashOrToken,

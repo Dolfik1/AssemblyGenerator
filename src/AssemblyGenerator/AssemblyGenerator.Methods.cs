@@ -22,7 +22,8 @@ namespace AssemblyGenerator
             var parameters = methodInfo.GetParameters();
             var countParameters = parameters.Length;
 
-            var blob = BuildSignature(x => x.MethodSignature()
+            var blob = BuildSignature(x => x.MethodSignature(
+                    convention: ConvertCallingConvention(methodInfo.CallingConvention))
                 .Parameters(
                 countParameters,
                 r => r.FromSystemType(retType, this),
@@ -80,7 +81,10 @@ namespace AssemblyGenerator
                             var sig = x.LocalVariableSignature(body.LocalVariables.Count);
                             foreach (var vrb in body.LocalVariables)
                             {
-                                sig.AddVariable().Type().FromSystemType(vrb.LocalType, this);
+                                sig.AddVariable().Type(
+                                    vrb.LocalType.IsByRef,
+                                    vrb.IsPinned)
+                                    .FromSystemType(vrb.LocalType, this);
                             }
 
                         })));

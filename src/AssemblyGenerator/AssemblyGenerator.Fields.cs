@@ -19,13 +19,16 @@ namespace AssemblyGenerator
         {
             var type = fieldInfo.FieldType;
             return GetBlob(
-                BuildSignature(x => x.FieldSignature()
+                BuildSignature(x => 
+                    x.FieldSignature()
                 .FromSystemType(type, this)));
         }
 
+        FieldDefinitionHandle _defaultField = default(FieldDefinitionHandle);
+
         private FieldDefinitionHandle CreateFields(FieldInfo[] fieldInfos)
         {
-            var handle = default(FieldDefinitionHandle);
+            var handle = _defaultField;
             foreach (var field in fieldInfos)
             {
                 var signature = GetFieldSignature(field);
@@ -33,11 +36,11 @@ namespace AssemblyGenerator
                     field.Attributes,
                     GetString(field.Name),
                     GetFieldSignature(field));
-                
-                CreateCustomAttributes(temp, field.GetCustomAttributesData());
 
+                CreateCustomAttributes(temp, field.GetCustomAttributesData());
+                
                 // It seems that we only need the first method
-                if (handle == default(FieldDefinitionHandle))
+                if (handle == _defaultField)
                     handle = temp;
             }
 

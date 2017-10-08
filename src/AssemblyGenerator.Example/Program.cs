@@ -18,7 +18,7 @@ namespace AssemblyGenerator.Example
             {
             }
         }
-
+        
         static void Main(string[] args)
         {
             var asm = Assembly.GetEntryAssembly();
@@ -51,5 +51,11 @@ namespace AssemblyGenerator.Example
         {
             return x;
         }
+        
+        void NonStaticMethod()
+        {
+
+        }
+        
     }
 }

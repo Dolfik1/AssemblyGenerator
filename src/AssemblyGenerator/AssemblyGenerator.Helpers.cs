@@ -28,6 +28,48 @@ namespace AssemblyGenerator
             return (AssemblyHashAlgorithm)alg;
         }
 
+        private SignatureCallingConvention ConvertCallingConvention(CallingConventions callingConvention)
+        {
+            var result = 0;
+
+            //if (callingConvention.HasFlag(CallingConventions.Any))
+            //    result |= SignatureCallingConvention.StdCall | SignatureCallingConvention.VarArgs;
+
+            if (callingConvention.HasFlag(CallingConventions.ExplicitThis))
+                result = 0x40;
+
+            else if (callingConvention.HasFlag(CallingConventions.HasThis))
+                result = 0x20;
+
+            else if (callingConvention.HasFlag(CallingConventions.Standard))
+                result = 0;//0x2;
+
+            else if (callingConvention.HasFlag(CallingConventions.VarArgs))
+                result = 0x5;
+
+            return (SignatureCallingConvention)result;
+            /*
+            var result = SignatureCallingConvention.Default;
+            
+            if (callingConvention.HasFlag(CallingConventions.Any))
+                result |= SignatureCallingConvention.StdCall | SignatureCallingConvention.VarArgs;
+
+            if (callingConvention.HasFlag(CallingConventions.ExplicitThis))
+                throw new Exception("Unknown Calling Convention (ExplicitThis)");
+
+            if (callingConvention.HasFlag(CallingConventions.HasThis))
+                result |= SignatureCallingConvention.ThisCall;
+
+            if (callingConvention.HasFlag(CallingConventions.Standard))
+                result |= SignatureCallingConvention.StdCall;
+
+            if (callingConvention.HasFlag(CallingConventions.VarArgs))
+                result |= SignatureCallingConvention.VarArgs;
+
+            return result;
+            */
+        }
+
         private BlobBuilder BuildSignature(Action<BlobEncoder> action)
         {
             var builder = new BlobBuilder();
@@ -50,12 +92,17 @@ namespace AssemblyGenerator
         {
             return _metadataBuilder.GetOrAddBlob(bytes);
         }
+        
         private BlobHandle GetBlobString(string str)
         {
-            if (string.IsNullOrEmpty(str))
+            if (str == null)
                 return default(BlobHandle);
-            
-            return _metadataBuilder.GetOrAddBlobUTF8(str);
+
+            var builder = new BlobBuilder();
+            builder.WriteBytes(new byte[] { 0x01, 0x00 }); // "prolog"
+            builder.WriteUTF8(str);
+
+            return GetBlob(builder);
         }
 
         private BlobHandle GetBlob(BlobBuilder builder)
