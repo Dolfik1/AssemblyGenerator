@@ -36,8 +36,7 @@ namespace AssemblyGenerator
                 GetBlob(name.GetPublicKey()),
                 _assemblyNameFlagsConvert(name.Flags),
                 _assemblyHashAlgorithmConvert(name.HashAlgorithm));
-
-
+            
             var refs = _currentAssembly.GetReferencedAssemblies();
             CreateReferencedAssemblies(refs);
 
@@ -55,7 +54,6 @@ namespace AssemblyGenerator
                 var methods = module.GetTypes();
                 Console.WriteLine();
             }
-
             var types = _currentAssembly.GetTypes();
             CreateTypes(assemblyHandle, types);
 

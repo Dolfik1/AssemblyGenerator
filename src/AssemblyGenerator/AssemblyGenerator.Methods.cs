@@ -36,8 +36,10 @@ namespace AssemblyGenerator
             var handle = default(MethodDefinitionHandle);
             foreach (var method in methodInfos)
             {
-                var offset = _ilBuilder.Count; // take an offset
+                if (method.IsHideBySig) // not sure
+                    continue;
 
+                var offset = _ilBuilder.Count; // take an offset
                 var body = method.GetMethodBody();
                 // If body exists, we write it in IL body stream
                 if (body != null)

@@ -6,7 +6,7 @@ namespace AssemblyGenerator
 {
     public partial class AssemblyGenerator
     {
-        private Dictionary<Type, EntityHandle> _typeHandles = new Dictionary<Type, EntityHandle>();
+        private Dictionary<Guid, EntityHandle> _typeHandles = new Dictionary<Guid, EntityHandle>();
 
         private void CreateTypes(Handle parent, Type[] types)
         {
@@ -21,26 +21,43 @@ namespace AssemblyGenerator
             return GetReferencedAssemblyForType(type);
         }
 
+        internal EntityHandle CreateReferencedType(Type type)
+        {
+            var scope = GetResolutionScopeForType(type);
+            var refType = _metadataBuilder.AddTypeReference(
+                scope,
+                GetString(type.Namespace),
+                GetString(type.Name));
+
+            _typeHandles.Add(type.GUID, refType);
+            return refType;
+        }
+
+        internal bool IsReferencedType(Type type)
+        {
+            // todo, also maybe in Module, ModuleRef, AssemblyRef and TypeRef
+            // ECMA-335 page 273-274
+            return type.Assembly != _currentAssembly;
+        }
+
         internal EntityHandle GetOrCreateType(Type type)
         {
-            if (_typeHandles.ContainsKey(type))
-                return _typeHandles[type];
-
+            if (_typeHandles.ContainsKey(type.GUID))
+                return _typeHandles[type.GUID];
+            
             var baseType = default(EntityHandle);
+
+            if (IsReferencedType(type))
+                return CreateReferencedType(type);
+
             if (type.BaseType != null)
             {
                 var bsType = type.BaseType;
                 if (bsType.Assembly != _currentAssembly)
                 {
-                    // todo, also maybe in Module, ModuleRef, AssemblyRef and TypeRef
-                    // ECMA-335 page 273-274
-                    var scope = GetResolutionScopeForType(bsType);
-                    var bsTypeRef = _metadataBuilder.AddTypeReference(
-                        scope,
-                        GetString(bsType.Namespace),
-                        GetString(bsType.Name));
-
-                    _typeHandles[bsType] = bsTypeRef;
+                    var bsTypeRef = CreateReferencedType(bsType);
+                    _typeHandles[bsType.GUID] = bsTypeRef;
+                    baseType = bsTypeRef;
                 }
                 else
                 {
@@ -48,17 +65,22 @@ namespace AssemblyGenerator
                 }
             }
 
+            Console.WriteLine(type.Name);
             var methods = CreateMethods(type.GetMethods());
             var fields = CreateFields(type.GetFields());
 
 
-            return _metadataBuilder.AddTypeDefinition(
+            var def = _metadataBuilder.AddTypeDefinition(
                 type.Attributes,
                 GetString(type.Namespace),
                 GetString(type.Name),
                 baseType,
                 fields, // todo
                 methods);
+
+            _typeHandles[type.GUID] = def;
+
+            return def;
         }
     }
 }

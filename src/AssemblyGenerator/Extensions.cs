@@ -59,8 +59,11 @@ namespace AssemblyGenerator
                 return;
             }
 
+            if (type.IsGenericType)
+                throw new ArgumentException("Generic types not supported for now!"); ;
+
             var typeHandler = generator.GetOrCreateType(type);
-            throw new ArgumentException("TODO. WHATS NEXT?");
+            typeEncoder.Type(typeHandler, type.IsValueType);
         }
     }
 }
