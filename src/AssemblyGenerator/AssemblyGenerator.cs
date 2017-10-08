@@ -36,7 +36,7 @@ namespace AssemblyGenerator
                 GetBlob(name.GetPublicKey()),
                 _assemblyNameFlagsConvert(name.Flags),
                 _assemblyHashAlgorithmConvert(name.HashAlgorithm));
-            
+
             var refs = _currentAssembly.GetReferencedAssemblies();
             CreateReferencedAssemblies(refs);
 
@@ -51,12 +51,14 @@ namespace AssemblyGenerator
                     default(GuidHandle)); // reserved in ECMA
 
                 CreateFields(module.GetFields());
-                var methods = module.GetTypes();
+                CreateTypes(module.GetTypes());
+                CreateMethods(module.GetMethods(_defaultMethodsBindingFlags));
+
                 Console.WriteLine();
             }
-            var types = _currentAssembly.GetTypes();
-            CreateTypes(assemblyHandle, types);
+            CreateTypes(_currentAssembly.GetTypes());
 
+            
             var metadataRootBuilder = new MetadataRootBuilder(_metadataBuilder);
             var header = PEHeaderBuilder.CreateLibraryHeader();
 

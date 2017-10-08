@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="AssemblyGenerator.Constructors.cs" />
     <None Include="AssemblyGenerator.Methods.cs" />
     <None Include="AssemblyGenerator.Assemblies.cs" />
   </ItemGroup>

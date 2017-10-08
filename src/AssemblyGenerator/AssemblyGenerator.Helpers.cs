@@ -33,6 +33,12 @@ namespace AssemblyGenerator
             return builder;
         }
 
+        private BlobBuilder BuildSignature(BlobBuilder builder, Action<BlobEncoder> action)
+        {
+            action(new BlobEncoder(builder));
+            return builder;
+        }
+
         private StringHandle GetString(string str)
         {
             return _metadataBuilder.GetOrAddString(str);

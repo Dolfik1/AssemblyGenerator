@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 
@@ -49,21 +50,64 @@ namespace AssemblyGenerator
         }
 
         internal static void FromSystemType(
+            this ReturnTypeEncoder typeEncoder,
+            Type type,
+            AssemblyGenerator generator)
+        {
+            if (type == typeof(void))
+            {
+                typeEncoder.Void();
+            }
+            else
+            {
+                typeEncoder.Type().FromSystemType(type, generator);
+            }
+        }
+
+        internal static void FromSystemType(
             this SignatureTypeEncoder typeEncoder,
             Type type,
             AssemblyGenerator generator)
         {
-            if (type.IsPrimitive || type == typeof(String) || type == typeof(Object))
+            if (type.IsPrimitive)
             {
                 typeEncoder.PrimitiveType(GetPrimitiveTypeCode(type));
-                return;
             }
+            else if (type == typeof(String))
+            {
+                typeEncoder.String();
+            }
+            else if (type == typeof(Object))
+            {
+                typeEncoder.Object();
+            }
+            else if (type == typeof(void))
+            {
+                throw new ArgumentException("Void type is not allowed in SignatureTypeEncoder. Please, use FromSystemType from ReturnTypeEncoder.");
+                //typeEncoder.VoidPointer();
+            }
+            else if (type.IsArray)
+            {
+                var elementType = type.GetElementType();
+                var rank = type.GetArrayRank();
 
-            if (type.IsGenericType)
-                throw new ArgumentException("Generic types not supported for now!"); ;
+                typeEncoder.Array(
+                    x => x.FromSystemType(elementType, generator),
+                    x => x.Shape(
+                        type.GetArrayRank(),
+                        ImmutableArray.Create<int>(),
+                        ImmutableArray.Create<int>()));
+            }
+            else if (type.IsGenericType)
+            {
+                throw new ArgumentException("Generic types not supported for now!");
+            }
+            else
+            {
 
-            var typeHandler = generator.GetOrCreateType(type);
-            typeEncoder.Type(typeHandler, type.IsValueType);
+                var typeHandler = generator.GetOrCreateType(type);
+                typeEncoder.Type(typeHandler, type.IsValueType);
+            }
         }
     }
 }

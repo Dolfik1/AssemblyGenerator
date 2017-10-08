@@ -5,6 +5,11 @@ namespace AssemblyGenerator
 {
     public partial class AssemblyGenerator
     {
+        BindingFlags _defaultFieldsBindingFlags =
+            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic |
+            BindingFlags.DeclaredOnly | BindingFlags.CreateInstance |
+            BindingFlags.Instance;
+
         /// <summary>
         /// Signature of field
         /// </summary>
@@ -13,12 +18,9 @@ namespace AssemblyGenerator
         private BlobHandle GetFieldSignature(FieldInfo fieldInfo)
         {
             var type = fieldInfo.FieldType;
-            if (type.IsPrimitive)
-                return GetBlob(
-                    BuildSignature(x => x.FieldSignature()
-                    .FromSystemType(type, this)));
-
-            return default(BlobHandle);
+            return GetBlob(
+                BuildSignature(x => x.FieldSignature()
+                .FromSystemType(type, this)));
         }
 
         private FieldDefinitionHandle CreateFields(FieldInfo[] fieldInfos)
@@ -33,7 +35,7 @@ namespace AssemblyGenerator
                     GetFieldSignature(field));
 
                 // It seems that we only need the first method
-                if (handle != default(FieldDefinitionHandle))
+                if (handle == default(FieldDefinitionHandle))
                     handle = temp;
             }
 

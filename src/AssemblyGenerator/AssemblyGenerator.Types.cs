@@ -8,7 +8,7 @@ namespace AssemblyGenerator
     {
         private Dictionary<Guid, EntityHandle> _typeHandles = new Dictionary<Guid, EntityHandle>();
 
-        private void CreateTypes(Handle parent, Type[] types)
+        private void CreateTypes(Type[] types)
         {
             foreach (var type in types)
             {
@@ -66,8 +66,11 @@ namespace AssemblyGenerator
             }
 
             Console.WriteLine(type.Name);
-            var methods = CreateMethods(type.GetMethods());
-            var fields = CreateFields(type.GetFields());
+
+            var methods = CreateMethods(type.GetMethods(_defaultMethodsBindingFlags));
+            var fields = CreateFields(type.GetFields(_defaultFieldsBindingFlags));
+            CreateConstructors(type.GetConstructors()); // TODO
+            
 
 
             var def = _metadataBuilder.AddTypeDefinition(
@@ -75,7 +78,7 @@ namespace AssemblyGenerator
                 GetString(type.Namespace),
                 GetString(type.Name),
                 baseType,
-                fields, // todo
+                fields,
                 methods);
 
             _typeHandles[type.GUID] = def;

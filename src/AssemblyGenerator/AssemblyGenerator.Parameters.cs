@@ -16,7 +16,7 @@ namespace AssemblyGenerator
                     GetString(param.Name),
                     i);
 
-                if (handle != default(ParameterHandle))
+                if (handle == default(ParameterHandle))
                     handle = tmp;
             }
 
