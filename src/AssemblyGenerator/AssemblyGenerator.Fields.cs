@@ -33,7 +33,7 @@ namespace AssemblyGenerator
                     field.Attributes,
                     GetString(field.Name),
                     GetFieldSignature(field));
-
+                
                 CreateCustomAttributes(temp, field.GetCustomAttributesData());
 
                 // It seems that we only need the first method

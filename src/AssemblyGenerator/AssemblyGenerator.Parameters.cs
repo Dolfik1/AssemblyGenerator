@@ -16,6 +16,7 @@ namespace AssemblyGenerator
                     GetString(param.Name),
                     i);
 
+                CreateCustomAttributes(tmp, param.GetCustomAttributesData());
                 if (handle == default(ParameterHandle))
                     handle = tmp;
             }

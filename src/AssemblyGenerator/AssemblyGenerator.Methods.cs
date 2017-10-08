@@ -33,7 +33,6 @@ namespace AssemblyGenerator
                     }
                 }));
             return GetBlob(blob);
-
         }
 
         private MethodDefinitionHandle GetMethodDefinitionHandle(MethodInfo methodInfo)

@@ -30,7 +30,9 @@ namespace AssemblyGenerator
                 GetString(type.Name));
 
             _typeHandles.Add(type.GUID, refType);
+
             CreateConstructorForReferencedType(type);
+            CreateCustomAttributes(refType, type.GetCustomAttributesData());
 
             return refType;
         }
@@ -83,6 +85,10 @@ namespace AssemblyGenerator
                 methods);
 
             _typeHandles[type.GUID] = def;
+
+            CreatePropertiesForType(def, type.GetProperties(_defaultPropertiesBindingFlags));
+            CreateCustomAttributes(def, type.GetCustomAttributesData());
+
 
             return def;
         }

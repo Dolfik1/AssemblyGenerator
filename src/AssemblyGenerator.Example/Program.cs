@@ -9,6 +9,15 @@ namespace AssemblyGenerator.Example
         public int TestInt = 0;
 
         public string TestProp { get; set; }
+        private string TestPrivateProp { get; set; }
+        private static string TestPrivateStaticProp { get; set; }
+        public string TestReadonlyProp { get; }
+        public string TestWriteonlyProp
+        {
+            set
+            {
+            }
+        }
 
         static void Main(string[] args)
         {

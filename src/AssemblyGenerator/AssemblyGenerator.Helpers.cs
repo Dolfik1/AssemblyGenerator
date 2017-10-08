@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
@@ -49,12 +50,11 @@ namespace AssemblyGenerator
         {
             return _metadataBuilder.GetOrAddBlob(bytes);
         }
-
         private BlobHandle GetBlobString(string str)
         {
             if (string.IsNullOrEmpty(str))
                 return default(BlobHandle);
-
+            
             return _metadataBuilder.GetOrAddBlobUTF8(str);
         }
 
