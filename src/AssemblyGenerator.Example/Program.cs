@@ -1,8 +1,17 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace AssemblyGenerator.Example
 {
+    /*
+    public class GenericClassTest<T>
+    {
+        private T _genericVar { get; set; }
+        public GenericClassTest(T test)
+        {
+            _genericVar = test;
+        }
+    }
+    */
     class Program
     {
         public string Test = "";
@@ -18,7 +27,7 @@ namespace AssemblyGenerator.Example
             {
             }
         }
-        
+
         static void Main(string[] args)
         {
             var asm = Assembly.GetEntryAssembly();
@@ -28,10 +37,10 @@ namespace AssemblyGenerator.Example
             {
                 generator.GenerateAssembly("output.dll");
             }
-
             //Console.WriteLine("READY!");
             //Console.ReadKey();
         }
+
 
         static void MainTestInt(int x)
         {
@@ -51,11 +60,11 @@ namespace AssemblyGenerator.Example
         {
             return x;
         }
-        
+
         void NonStaticMethod()
         {
 
         }
-        
+
     }
 }

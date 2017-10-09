@@ -4,6 +4,8 @@ Fields list in property has null, when empty
 Default constructor not verified
 Entry point return type void incorrect (why?)
 
+Assembly flags None is not supported (fix it)
+
 
 why?
 

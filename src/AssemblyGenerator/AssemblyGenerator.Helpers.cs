@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using CfgAssemblyHashAlgorithm = System.Configuration.Assemblies.AssemblyHashAlgorithm;
 
 namespace AssemblyGenerator
@@ -17,7 +15,7 @@ namespace AssemblyGenerator
                 // we not support only AssemblyNameFlags.None flag
                 // also i'm not sure about AssemblyNameFlags.EnableJITcompileOptimizer flag
                 case AssemblyNameFlags.None:
-                    return AssemblyFlags.PublicKey; // Possible wrong
+                    return 0; // Possible wrong
                 default:
                     return (AssemblyFlags)flags;
             }

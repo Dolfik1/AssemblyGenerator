@@ -20,6 +20,7 @@ namespace AssemblyGenerator
                     default(GuidHandle), // reserved in ECMA
                     default(GuidHandle)); // reserved in ECMA
 
+                CreateCustomAttributes(moduleHandle, module.GetCustomAttributesData());
                 CreateFields(module.GetFields());
                 CreateTypes(module.GetTypes());
                 CreateMethods(module.GetMethods(_defaultMethodsBindingFlags));

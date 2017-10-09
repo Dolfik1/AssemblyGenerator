@@ -23,6 +23,9 @@ namespace AssemblyGenerator
 
         internal EntityHandle CreateReferencedType(Type type)
         {
+            if (_typeHandles.ContainsKey(type.GUID))
+                return _typeHandles[type.GUID];
+
             var scope = GetResolutionScopeForType(type);
             var refType = _metadataBuilder.AddTypeReference(
                 scope,
@@ -89,7 +92,7 @@ namespace AssemblyGenerator
             _typeHandles[type.GUID] = def;
 
 
-            if (propsHandle == default(PropertyDefinitionHandle))
+            if (propsHandle != default(PropertyDefinitionHandle))
             {
                 _metadataBuilder.AddPropertyMap(def, propsHandle);
             }

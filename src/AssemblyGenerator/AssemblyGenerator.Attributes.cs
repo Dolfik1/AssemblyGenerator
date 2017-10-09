@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
-using System.Runtime.Versioning;
-using System.Text;
 
 namespace AssemblyGenerator
 {
@@ -20,11 +17,23 @@ namespace AssemblyGenerator
                 var args = attr.ConstructorArguments;
                 var text = string.Join(",", args.Select(x =>
                 {
-                    //var val = x.Value;
-                    return $"\"{x.Value}\"";
+                    return $"\"{x.Value}";
                 }));
 
+                /*
+                var namedArgs = attr.NamedArguments;
+                var namedText = string.Join(", ", namedArgs
+                    .Where(x => !string.IsNullOrEmpty(x.TypedValue.Value.ToString()))
+                    .Select(x =>
+                {
+                    return $"{x.MemberName}=\"{x.TypedValue.Value}\"";
+                }));
+
+                if (!string.IsNullOrEmpty(namedText))
+                    text += $", {namedText}";
+                */
                 var ctor = GetTypeConstructor(type);
+                //Console.WriteLine(text);
                 _metadataBuilder.AddCustomAttribute(parent, ctor, GetCustomAttributeValueFromString(text));
             }
         }

@@ -63,11 +63,11 @@ namespace AssemblyGenerator
                 {
                     _metadataBuilder.AddMethodSemantics(
                         tmp,
-                        MethodSemanticsAttributes.Getter,
+                        MethodSemanticsAttributes.Setter,
                         GetOrCreateMethod(setMethod));
                 }
             }
-
+            
             return handle;
         }
     }
