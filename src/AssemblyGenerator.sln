@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyGenerator", "Assemb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyGenerator.Example", "AssemblyGenerator.Example\AssemblyGenerator.Example.csproj", "{036122ED-B6DB-4DB8-845F-C427895A0770}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyGenerator.SampleAssembly", "AssemblyGenerator.SampleAssembly\AssemblyGenerator.SampleAssembly.csproj", "{CFC36CF7-9102-4166-B32D-E0FC088F0045}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{036122ED-B6DB-4DB8-845F-C427895A0770}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{036122ED-B6DB-4DB8-845F-C427895A0770}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{036122ED-B6DB-4DB8-845F-C427895A0770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC36CF7-9102-4166-B32D-E0FC088F0045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC36CF7-9102-4166-B32D-E0FC088F0045}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC36CF7-9102-4166-B32D-E0FC088F0045}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC36CF7-9102-4166-B32D-E0FC088F0045}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
