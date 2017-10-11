@@ -33,8 +33,11 @@ namespace AssemblyGenerator
                     text += $", {namedText}";
                 */
                 var ctor = GetTypeConstructor(type);
-                //Console.WriteLine(text);
-                _metadataBuilder.AddCustomAttribute(parent, ctor, GetCustomAttributeValueFromString(text));
+                if (ctor != null)
+                {
+                    //Console.WriteLine(text);
+                    _metadataBuilder.AddCustomAttribute(parent, ctor.Value, GetCustomAttributeValueFromString(text));
+                }
             }
         }
     }

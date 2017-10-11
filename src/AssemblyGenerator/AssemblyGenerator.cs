@@ -44,7 +44,6 @@ namespace AssemblyGenerator
             CreateTypes(_currentAssembly.GetTypes());
 
             var entryPoint = GetMethodDefinitionHandle(_currentAssembly.EntryPoint);
-            
 
             var metadataRootBuilder = new MetadataRootBuilder(_metadataBuilder);
             var header = PEHeaderBuilder.CreateLibraryHeader();

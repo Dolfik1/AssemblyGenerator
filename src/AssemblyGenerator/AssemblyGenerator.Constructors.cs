@@ -33,9 +33,10 @@ namespace AssemblyGenerator
             return GetBlob(blob);
         }
 
-        internal EntityHandle GetTypeConstructor(Type type)
+        internal EntityHandle? GetTypeConstructor(Type type)
         {
-            return _typeConstructors[type.GUID].First();
+            _typeConstructors.TryGetValue(type.GUID, out var collection);
+            return collection?.First();
         }
 
         internal MemberReferenceHandle CreateConstructorForReferencedType(Type type)
